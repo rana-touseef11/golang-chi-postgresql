@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -60,11 +59,13 @@ func server_Setup(cfg *config.Config, r *chi.Mux) {
 
 	go func() {
 		slog.Info("Server started...", slog.String("Addr", server.Addr))
-		if err := server.ListenAndServe(); err != nil {
-			log.Fatalf("Failed to start server: %s", err)
+
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("Failed to start server", slog.String("Error", err.Error()))
 		}
 	}()
-	<-done
+	sig := <-done
+	slog.Info("Signal received", slog.String("signal", sig.String()))
 
 	ctx, cancel := context.WithTimeout(context.Background(), fiveSec)
 	defer cancel()
