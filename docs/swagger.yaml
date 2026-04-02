@@ -1,0 +1,132 @@
+basePath: /api/v1
+definitions:
+  dto.CreateUserRequest:
+    properties:
+      address:
+        description: '* make this field optional'
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - name
+    - phone
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      address:
+        description: '* make this field optional'
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - name
+    - phone
+    type: object
+  dto.UserLoginRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+info:
+  contact: {}
+  title: Golang Chi PostgreSQL
+  version: v1
+paths:
+  /auth/login:
+    post:
+      description: /auth/login
+      parameters:
+      - description: ' '
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/dto.UserLoginRequest'
+      responses: {}
+      tags:
+      - Auth
+  /users:
+    get:
+      description: /users
+      responses: {}
+      tags:
+      - Users
+    post:
+      description: /users
+      parameters:
+      - description: ' '
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      responses: {}
+      security:
+      - Authorization: []
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      description: /users/{id}
+      parameters:
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses: {}
+      security:
+      - Authorization: []
+      tags:
+      - Users
+    get:
+      description: /users/{id}
+      parameters:
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Users
+    put:
+      description: /users/{id}
+      parameters:
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      responses: {}
+      security:
+      - Authorization: []
+      tags:
+      - Users
+securityDefinitions:
+  Authorization:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

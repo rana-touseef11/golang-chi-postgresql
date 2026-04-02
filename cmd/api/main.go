@@ -15,8 +15,17 @@ import (
 	"github.com/rana-touseef11/go-chi-postgresql/internal/middleware"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/router"
 	"github.com/rana-touseef11/go-chi-postgresql/pkg/database"
+
+	_ "github.com/rana-touseef11/go-chi-postgresql/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// @title Golang Chi PostgreSQL
+// @version v1
+// @BasePath  /api/v1
+// @securityDefinitions.apikey Authorization
+// @name Authorization
+// @in header
 func main() {
 	// load Config
 	var cfg = config.MustLoad()
@@ -38,6 +47,7 @@ func main() {
 	// 	w.Write([]byte("Salamun Alaikum"))
 	// })
 
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
 	r.Mount("/api/v1", api)
 
 	// load server

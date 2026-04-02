@@ -88,5 +88,6 @@ func JWTSign(userID string, exp time.Duration, roles ...string) (string, error) 
 		return "", err
 	}
 
-	return jwtToken, nil
+	str := strings.Join([]string{"Bearer", jwtToken}, " ")
+	return str, nil
 }

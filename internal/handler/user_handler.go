@@ -17,6 +17,10 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 	return &UserHandler{service: s}
 }
 
+// GetAll
+// @Description  /users
+// @Tags         Users
+// @Router       /users [get]
 func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	users, err := h.service.GetAll(r.Context())
 	if err != nil {
@@ -27,6 +31,11 @@ func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	response.WriteJson(w, http.StatusOK, users)
 }
 
+// Login
+// @Description  /auth/login
+// @Tags         Auth
+// @Param        payload  body  dto.UserLoginRequest false " "
+// @Router       /auth/login [post]
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var req dto.UserLoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -46,6 +55,12 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	response.WriteJson(w, http.StatusOK, res)
 }
 
+// Create
+// @Description  /users
+// @Tags         Users
+// @Security     Authorization
+// @Param        payload  body  dto.CreateUserRequest false " "
+// @Router       /users [post]
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -62,6 +77,12 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	response.WriteJson(w, http.StatusOK, data)
 }
 
+// GetById
+// @Description  /users/{id}
+// @Tags         Users
+// @Param        id    path     string  true "User Id"
+// @Success      200
+// @Router       /users/{id} [get]
 func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	// native net/http
 	id := r.PathValue("id")
@@ -77,6 +98,13 @@ func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	response.WriteJson(w, http.StatusOK, user)
 }
 
+// Update
+// @Description  /users/{id}
+// @Tags         Users
+// @Security     Authorization
+// @Param        id  path  string true "User Id"
+// @Param        payload  body  dto.UpdateUserRequest false " "
+// @Router       /users/{id} [put]
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	var req dto.UpdateUserRequest
@@ -98,6 +126,12 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	response.WriteJson(w, http.StatusOK, user)
 }
 
+// Delete
+// @Description  /users/{id}
+// @Tags         Users
+// @Security     Authorization
+// @Param        id  path  string true "User Id"
+// @Router       /users/{id} [delete]
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	var err = h.service.Delete(r.Context(), id)
