@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
+
 	"github.com/rana-touseef11/go-chi-postgresql/internal/app"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/config"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/middleware"
@@ -23,7 +25,7 @@ import (
 // @title Golang Chi PostgreSQL
 // @version v1
 // @BasePath  /api/v1
-// @securityDefinitions.apikey Authorization
+// @securityDefinitions.apikey BearerAuth
 // @name Authorization
 // @in header
 func main() {
@@ -38,8 +40,10 @@ func main() {
 
 	// load router
 	r := chi.NewRouter()
-	api := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(httprate.LimitByIP(59, time.Minute))
+
+	api := chi.NewRouter()
 
 	handle := app.NewApp(pool)
 	router.RegisterUserRoutes(api, handle.UserHandler)
@@ -47,7 +51,9 @@ func main() {
 	// 	w.Write([]byte("Salamun Alaikum"))
 	// })
 
-	r.Get("/swagger/*", httpSwagger.WrapHandler)
+	if cfg.ENV != "prod" {
+		r.Get("/swagger/*", httpSwagger.WrapHandler)
+	}
 	r.Mount("/api/v1", api)
 
 	// load server

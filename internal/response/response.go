@@ -4,14 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
 
-type Response struct {
-	Status string
-	Error  string
+type Response[T any] struct {
+	Status  string   `json:"status"`
+	Message string   `json:"message,omitempty"`
+	Data    T        `json:"data,omitempty"`
+	Errors  []string `json:"errors,omitempty"`
+	Meta    any      `json:"meta,omitempty"`
 }
 
 const (
@@ -26,21 +28,28 @@ func WriteJson(w http.ResponseWriter, status int, data any) error {
 	return json.NewEncoder(w).Encode(data)
 }
 
-func ValidationError(errs validator.ValidationErrors) Response {
+func GeneralError(err error) Response[any] {
+	return Response[any]{
+		Status: StatusError,
+		Errors: []string{err.Error()},
+	}
+}
+
+func ValidationErrors(errs validator.ValidationErrors) Response[any] {
 	var errMsgs []string
 
 	for _, err := range errs {
 		switch err.ActualTag() {
 		case "required":
-			errMsgs = append(errMsgs, fmt.Sprintf("field %s is required field", err.Field()))
+			errMsgs = append(errMsgs, fmt.Sprintf("%s is required field", err.Field()))
 		default:
-			errMsgs = append(errMsgs, fmt.Sprintf("field %s is  invalid", err.Field()))
+			errMsgs = append(errMsgs, fmt.Sprintf("%s is invalid", err.Field()))
 		}
 	}
 
-	return Response{
-		Status: StatusError,
-		Error:  strings.Join(errMsgs, ", "),
+	return Response[any]{
+		Status:  StatusError,
+		Errors:  errMsgs,
+		Message: "Validation Faild",
 	}
-
 }

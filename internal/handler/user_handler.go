@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/rana-touseef11/go-chi-postgresql/internal/dto"
+	"github.com/rana-touseef11/go-chi-postgresql/internal/middleware"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/response"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/service"
 )
@@ -37,13 +37,13 @@ func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Param        payload  body  dto.UserLoginRequest false " "
 // @Router       /auth/login [post]
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-	var req dto.UserLoginRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invaild Request", http.StatusBadRequest)
+	var req, ok = middleware.GetBody[dto.UserLoginRequest](r)
+	if !ok {
+		http.Error(w, "Invaild Context", http.StatusBadRequest)
 		return
 	}
 
-	data, token, err := h.service.Login(r.Context(), req)
+	data, token, err := h.service.Login(r.Context(), *req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -58,17 +58,17 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 // Create
 // @Description  /users
 // @Tags         Users
-// @Security     Authorization
+// @Security     BearerAuth
 // @Param        payload  body  dto.CreateUserRequest false " "
 // @Router       /users [post]
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var req dto.CreateUserRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invaild Request", http.StatusBadRequest)
+	var req, ok = middleware.GetBody[dto.CreateUserRequest](r)
+	if !ok {
+		http.Error(w, "Invaild Context", http.StatusBadRequest)
 		return
 	}
 
-	data, err := h.service.Create(r.Context(), req)
+	data, err := h.service.Create(r.Context(), *req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -101,23 +101,19 @@ func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 // Update
 // @Description  /users/{id}
 // @Tags         Users
-// @Security     Authorization
+// @Security     BearerAuth
 // @Param        id  path  string true "User Id"
 // @Param        payload  body  dto.UpdateUserRequest false " "
 // @Router       /users/{id} [put]
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	var req dto.UpdateUserRequest
-	if r.Body == nil {
-		http.Error(w, "There noting to update", http.StatusBadRequest)
-		return
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var req, ok = middleware.GetBody[dto.UpdateUserRequest](r)
+	if !ok {
+		http.Error(w, "Invaild Context", http.StatusBadRequest)
 		return
 	}
 
-	user, err := h.service.Update(r.Context(), id, req)
+	user, err := h.service.Update(r.Context(), id, *req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -129,7 +125,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 // Delete
 // @Description  /users/{id}
 // @Tags         Users
-// @Security     Authorization
+// @Security     BearerAuth
 // @Param        id  path  string true "User Id"
 // @Router       /users/{id} [delete]
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {

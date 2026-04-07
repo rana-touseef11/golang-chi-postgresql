@@ -18,17 +18,8 @@ type User struct {
 	Address *string              `json:"address,omitempty"`
 	Status  *constant.UserStatus `json:"status,omitempty"`
 
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
-}
-
-func NewUserFromDTO(req dto.UserBase) *User {
-	return &User{
-		Name:    req.Name,
-		Email:   req.Email,
-		Phone:   req.Phone,
-		Address: req.Address, // ✅ just pass it
-	}
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 func (u *User) UpdateUserFromDTO(req dto.UpdateUserRequest) {

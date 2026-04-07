@@ -21,3 +21,5 @@ type UpdateUserRequest struct {
 	Phone   *string `json:"phone,omitempty" validate:"required"`
 	Address *string `json:"address,omitempty"` // * make this field optional
 }
+
+type UserResponse struct{}

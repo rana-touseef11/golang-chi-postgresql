@@ -37,7 +37,7 @@
             "post": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users",
@@ -81,7 +81,7 @@
             "put": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users/{id}",
@@ -110,7 +110,7 @@
             "delete": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users/{id}",
@@ -194,7 +194,7 @@
         }
     },
     "securityDefinitions": {
-        "Authorization": {
+        "BearerAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

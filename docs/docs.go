@@ -45,7 +45,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users",
@@ -89,7 +89,7 @@ const docTemplate = `{
             "put": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users/{id}",
@@ -118,7 +118,7 @@ const docTemplate = `{
             "delete": {
                 "security": [
                     {
-                        "Authorization": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "/users/{id}",
@@ -202,7 +202,7 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "Authorization": {
+        "BearerAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

@@ -76,7 +76,7 @@ paths:
           $ref: '#/definitions/dto.CreateUserRequest'
       responses: {}
       security:
-      - Authorization: []
+      - BearerAuth: []
       tags:
       - Users
   /users/{id}:
@@ -90,7 +90,7 @@ paths:
         type: string
       responses: {}
       security:
-      - Authorization: []
+      - BearerAuth: []
       tags:
       - Users
     get:
@@ -121,11 +121,11 @@ paths:
           $ref: '#/definitions/dto.UpdateUserRequest'
       responses: {}
       security:
-      - Authorization: []
+      - BearerAuth: []
       tags:
       - Users
 securityDefinitions:
-  Authorization:
+  BearerAuth:
     in: header
     name: Authorization
     type: apiKey

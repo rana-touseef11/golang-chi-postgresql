@@ -4,8 +4,14 @@ export
 print:
 	echo $(DB_URL)
 
-run-start:
+run-dev:
 	go run cmd/api/main.go
+
+build:
+	go build -o app ./cmd/api
+
+start:
+	./app
 
 swag-init:
 	swag init -g cmd/api/main.go
