@@ -16,6 +16,10 @@ start:
 swag-init:
 	swag init -g cmd/api/main.go
 
+# DB cmd
+create-db:
+	createdb -U $(DB_USER) -h $(DB_HOST) -p $(DB_PORT) $(DB_NAME) || true
+
 migrate-create:
 	migrate create -ext sql -dir migrations -seq $(name)
 
