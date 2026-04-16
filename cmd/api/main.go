@@ -15,7 +15,6 @@ import (
 	"github.com/rana-touseef11/go-chi-postgresql/internal/app"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/config"
 	"github.com/rana-touseef11/go-chi-postgresql/internal/middleware"
-	"github.com/rana-touseef11/go-chi-postgresql/internal/router"
 	"github.com/rana-touseef11/go-chi-postgresql/pkg/database"
 
 	_ "github.com/rana-touseef11/go-chi-postgresql/docs"
@@ -45,8 +44,8 @@ func main() {
 
 	api := chi.NewRouter()
 
-	handle := app.NewApp(pool)
-	router.RegisterUserRoutes(api, handle.UserHandler)
+	app.NewAppRouter(api, pool)
+
 	// r.Get("/users", func(w http.ResponseWriter, r *http.Request) {
 	// 	w.Write([]byte("Salamun Alaikum"))
 	// })
