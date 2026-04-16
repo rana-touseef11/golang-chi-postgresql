@@ -46,9 +46,9 @@ func main() {
 
 	app.NewAppRouter(api, pool)
 
-	// r.Get("/users", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("Salamun Alaikum"))
-	// })
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Salamun Alaikum"))
+	})
 
 	if cfg.ENV != "prod" {
 		r.Get("/swagger/*", httpSwagger.WrapHandler)
